@@ -1,0 +1,198 @@
+--- a/index.html
++++ b/index.html
+@@ -1 +1 @@
+-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#413b37"><meta name="description" content="Riccardo Tammaro — Walk Through Time, an immersive personal journey."><title>Riccardo Tammaro — Walk Through Time</title><link rel="stylesheet" href="style.css"></head><body><header class="masthead"><a class="brand" href="#chapter-0">RICCARDO TAMMARO <span>/ WALK THROUGH TIME</span></a><nav class="top-nav" aria-label="Main navigation"><a href="#chapter-0">INTRO</a><a href="#chapter-1">STORY</a><a href="#chapter-5">WORK</a><a href="#chapter-6">CONTACT</a></nav><div class="header-actions"><button id="sound" type="button" aria-label="Play ambient soundtrack" aria-pressed="false">♪ SOUND OFF</button><button id="fullscreen" type="button" aria-label="Enter full screen" aria-pressed="false">⛶ FULL SCREEN</button><span id="chapterCount" class="chapter-count">00 / 06</span></div></header><div class="scroll-progress" aria-hidden="true"><span id="scrollProgress"></span></div><main id="story" class="story" aria-label="Walk Through Time"></main><footer class="footer"><div class="timeline-label"><span>THE JOURNEY</span><span id="timelineCaption">PROLOGUE</span></div><nav class="timeline" id="timeline" aria-label="Journey chapters"></nav><div class="footer-hint">SCROLL TO EXPLORE · SELECT ANY CHAPTER</div></footer><dialog id="lightbox" class="lightbox" aria-label="Photo gallery"><div class="lightbox-toolbar"><span id="lightboxCounter"></span><button id="closeLightbox" type="button" aria-label="Close gallery">CLOSE ✕</button></div><img id="lightboxImage" alt=""><p id="lightboxCaption"></p><div class="lightbox-controls"><button id="prevPhoto" type="button" aria-label="Previous photograph">← PREVIOUS</button><button id="nextPhoto" type="button" aria-label="Next photograph">NEXT →</button></div></dialog><audio id="ambientAudio" src="media/the-great-gatsby.mp3" preload="none" loop></audio><script src="script.js" defer></script></body></html>
+\ No newline at end of file
++<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#413b37"><meta name="description" content="Riccardo Tammaro — Walk Through Time, an immersive personal journey."><title>Riccardo Tammaro — Walk Through Time</title><link rel="stylesheet" href="style.css?v=cover8-editorial"></head><body><header class="masthead"><a class="brand" href="#chapter-0">RICCARDO TAMMARO <span>/ WALK THROUGH TIME</span></a><nav class="top-nav" aria-label="Main navigation"><a href="#chapter-0">INTRO</a><a href="#chapter-1">STORY</a><a href="#chapter-5">WORK</a><a href="#chapter-6">CONTACT</a></nav><div class="header-actions"><button id="sound" type="button" aria-label="Play ambient soundtrack" aria-pressed="false">♪ SOUND OFF</button><button id="fullscreen" type="button" aria-label="Enter full screen" aria-pressed="false">⛶ FULL SCREEN</button><span id="chapterCount" class="chapter-count">00 / 06</span></div></header><div class="scroll-progress" aria-hidden="true"><span id="scrollProgress"></span></div><main id="story" class="story" aria-label="Walk Through Time"></main><footer class="footer"><div class="timeline-label"><span>THE JOURNEY</span><span id="timelineCaption">PROLOGUE</span></div><nav class="timeline" id="timeline" aria-label="Journey chapters"></nav><div class="footer-hint">SCROLL TO EXPLORE · SELECT ANY CHAPTER</div></footer><dialog id="lightbox" class="lightbox" aria-label="Photo gallery"><div class="lightbox-toolbar"><span id="lightboxCounter"></span><button id="closeLightbox" type="button" aria-label="Close gallery">CLOSE ✕</button></div><img id="lightboxImage" alt=""><p id="lightboxCaption"></p><div class="lightbox-controls"><button id="prevPhoto" type="button" aria-label="Previous photograph">← PREVIOUS</button><button id="nextPhoto" type="button" aria-label="Next photograph">NEXT →</button></div></dialog><audio id="ambientAudio" src="media/the-great-gatsby.mp3" preload="none" loop></audio><script src="script.js?v=cover8-editorial" defer></script></body></html>
+\ No newline at end of file
+--- a/script.js
++++ b/script.js
+@@ -1,24 +1,6 @@
+ 
+ 'use strict';
+ const A='assets/';
+-// Decontaminate only the alpha contour at the crown and outer hairline.
+-const coverFilter=`<svg class="cover-filter" aria-hidden="true" width="0" height="0"><defs>
+- <filter id="cover-edge" x="0" y="0" width="1" height="1" primitiveUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+-  <feMorphology in="SourceAlpha" operator="erode" radius=".014 .012" result="inner"/>
+-  <feComposite in="SourceAlpha" in2="inner" operator="out" result="edge"/>
+-  <feComponentTransfer in="edge" result="solid-edge"><feFuncA type="linear" slope="20"/></feComponentTransfer>
+-  <feFlood flood-color="white" x=".36" y=".035" width=".35" height=".095" result="crown"/>
+-  <feFlood flood-color="white" x=".625" y=".105" width=".075" height=".12" result="side"/>
+-  <feMerge result="zone"><feMergeNode in="crown"/><feMergeNode in="side"/></feMerge>
+-  <feGaussianBlur in="zone" stdDeviation=".004" result="soft-zone"/>
+-  <feComposite in="solid-edge" in2="soft-zone" operator="in" result="hair-edge"/>
+-  <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -.6776 -2.2797 -.2302 0 1.875" result="matte"/>
+-  <feComposite in="SourceGraphic" in2="matte" operator="in" result="keyed"/>
+-  <feComposite in="keyed" in2="hair-edge" operator="in" result="refined-edge"/>
+-  <feComposite in="SourceGraphic" in2="hair-edge" operator="out" result="untouched"/>
+-  <feComposite in="untouched" in2="refined-edge" operator="arithmetic" k2="1" k3="1"/>
+- </filter>
+-</defs></svg>`;
+ const chapters=[
+ {label:'Prologue',eyebrow:'PROLOGUE · 00',title:'Hi, I’m<br><em>Riccardo.</em>',copy:'Two sides to the story, one person. Before every slide, every pipeline and every demo, there’s a small-town kid who still gets emotional over a sunset and a goal scored in the last minute.',memories:[['01-portrait-of-riccardo.jpg','A PERSON, MANY SIDES','Every journey begins with a person.'],['06-sunset-on-a-beach.jpg','THE LITTLE THINGS','The moments worth slowing down for.']]},
+ {label:'Childhood',eyebrow:'CHAPTER ONE · 01',title:'Where it<br><em>all began.</em>',copy:'I was born in a small town in Campania, where a little square in front of the village church became our football pitch every afternoon. Friends, football, and a whole world to discover.',memories:[['02-children-playing-football-in-a-small-tow.jpg','A SMALL TOWN','A square, a football and a bunch of friends.'],['01-portrait-of-riccardo.jpg','ROOTS','The places we come from stay with us.']]},
+@@ -33,7 +15,7 @@
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const timeline=$('timeline'),story=$('story'),dialog=$('lightbox');
+ const journeyPhotos=[
+- {src:A+'cover-lumiere.webp',chapter:0,label:'The person',caption:'Riccardo · Walk Through Time',cover:true},
++ {src:A+'cover-editorial.png',chapter:0,label:'The person',caption:'Riccardo · Walk Through Time',cover:true},
+  {src:A+'02-children-playing-football-in-a-small-tow.jpg',chapter:1,label:'Where it all began',caption:'Friends, football and a village square.'},
+  {src:'chapter02/assets/zaino.jpg',chapter:2,scene:'exploring',label:'Always exploring',caption:'A backpack always ready.'},
+  {src:'chapter02/assets/vienna.jpg',chapter:2,scene:'vienna',label:'Routes & possibilities',caption:'Vienna · An unexpected chocolate discovery near the Hofburg.'},
+@@ -54,7 +36,7 @@
+  const sec=document.createElement('section');sec.className='chapter';sec.id='chapter-'+i;sec.dataset.chapter=i;sec.setAttribute('aria-label',c.label);
+  if(i===0){
+  sec.classList.add('lumiere-hero');
+- sec.innerHTML=`${coverFilter}<div class="lumiere-light" aria-hidden="true"></div><div class="lumiere-name" aria-label="Riccardo Tammaro"><span>RICCARDO</span><span>TAMMARO</span></div><img class="lumiere-portrait" src="assets/cover-lumiere.webp" alt="Black and white portrait of Riccardo, seated and looking thoughtfully to the side" fetchpriority="high"><div class="lumiere-subtitle"><span>WALK THROUGH TIME</span><em>The Story of Becoming.</em></div><a class="lumiere-scroll" href="#chapter-1">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a>`;
++ sec.innerHTML=`<div class="lumiere-copy"><h1 class="lumiere-name" aria-label="Riccardo Tammaro"><span>RICCARDO</span><span>TAMMARO</span></h1><div class="lumiere-subtitle"><span>WALK THROUGH TIME</span><em>The Story of Becoming.</em></div></div><img class="lumiere-portrait" src="assets/cover-editorial.png" alt="Black and white portrait of Riccardo in a white shirt, seated on a leather sofa and looking toward the viewer" fetchpriority="high"><a class="lumiere-scroll" href="#chapter-1">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a>`;
+  story.append(sec);
+  const link=document.createElement('a');link.href='#chapter-0';link.className='milestone';link.innerHTML='<span>00</span><small>Prologue</small>';link.setAttribute('aria-label','Jump to Prologue');timeline.append(link);
+  return;
+--- a/style.css
++++ b/style.css
+@@ -21,31 +21,28 @@
+ @media(max-width:700px){.chapter:first-child{min-height:0}.chapter:first-child h1{font-size:clamp(55px,13vw,85px)}.chapter:first-child .chapter-copy{padding-top:0}.begin-journey{margin-top:20px}.chapter:nth-child(2):before,.chapter:nth-child(4):before{inset:0 -16px}}
+ @media(prefers-reduced-motion:reduce){.chapter.visible .eyebrow,.chapter.visible h1,.chapter.visible .chapter-description{animation:none!important}.scroll-progress span{will-change:auto}}
+ 
+-/* Lumiere x Biography: approved photographic cover */
++/* Approved editorial cover. */
+ :root{--serif:'Bodoni MT','Didot','Times New Roman',Georgia,serif}
+ body{background:#ebe3d7}
+-.lumiere-hero{isolation:isolate;position:relative;display:block!important;min-height:100svh!important;margin:0 calc(-1 * clamp(20px,4vw,70px));padding:0!important;overflow:hidden;border:0!important;background:radial-gradient(ellipse 58% 72% at 49% 34%,#746d67 0%,#514a45 54%,#2a2726 100%);color:#f7f0e7}
+-.lumiere-light{position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,14,13,.28),transparent 27%,transparent 70%,rgba(16,14,13,.25));z-index:1;pointer-events:none}
+-.cover-filter{position:absolute;pointer-events:none}
+-.lumiere-portrait{position:absolute;z-index:2;bottom:-1.5%;left:50%;transform:translateX(-50%);width:auto;height:min(98svh,1000px);max-width:none;object-fit:contain;object-position:center bottom;filter:url(#cover-edge) grayscale(1) contrast(1.05);pointer-events:none;animation:lumiereAppear 1.4s ease-out both}
+-.lumiere-name{position:absolute;z-index:3;top:44%;left:50%;transform:translate(-50%,-3%);width:100%;display:flex;flex-direction:column;align-items:center;color:#f9f2e8;font:normal clamp(75px,11.4vw,205px)/.78 var(--serif);letter-spacing:-.052em;text-align:center;white-space:nowrap;pointer-events:none;text-shadow:0 1px 9px rgba(0,0,0,.12);animation:lumiereTitle 1.1s .3s both}
+-.lumiere-name span{display:block;max-width:98vw}
+-.lumiere-name span+span{margin-top:.14em}
+-.lumiere-subtitle{position:absolute;z-index:4;top:79%;left:50%;transform:translateX(-50%);width:min(86%,800px);display:flex;flex-direction:column;align-items:center;text-align:center;color:#f7eee4;text-shadow:0 1px 12px #27221f}
+-.lumiere-subtitle>span{font:normal clamp(14px,2vw,29px)/1.2 var(--serif);letter-spacing:.3em;white-space:nowrap}
+-.lumiere-subtitle em{margin-top:9px;font:italic clamp(16px,1.8vw,26px)/1.2 var(--serif);letter-spacing:.05em}
+-.lumiere-scroll{position:absolute;z-index:5;bottom:clamp(105px,14vh,165px);left:clamp(20px,4vw,70px);font-size:10px;letter-spacing:.22em;text-decoration:none;color:#f7eee4;display:flex;flex-direction:column;gap:8px}
+-.lumiere-scroll span{font-size:26px}
+-@keyframes lumiereAppear{from{opacity:0;transform:translateX(-50%) scale(1.025)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+-@keyframes lumiereTitle{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,-3%)}}
++.lumiere-hero{isolation:isolate;position:relative;display:block!important;height:calc(100svh - var(--header-height) - var(--footer-height));min-height:460px!important;margin:0 calc(-1 * clamp(20px,4vw,70px));padding:0!important;overflow:hidden;border:0!important;background:linear-gradient(110deg,#3b3835,#514d49 58%,#514e4a);color:#f7f0e7}
++.lumiere-portrait{position:absolute;z-index:2;bottom:-22%;left:70%;transform:translateX(-50%);width:auto;height:128%;max-width:none;object-fit:contain;object-position:center bottom;pointer-events:none}
++.lumiere-copy{position:absolute;z-index:3;top:28%;left:6.5%;width:43%;max-width:720px}
++.chapter.lumiere-hero .lumiere-name{margin:0;display:flex;flex-direction:column;align-items:flex-start;color:#f9f2e8;font:normal clamp(64px,min(8vw,calc((100svh - var(--header-height) - var(--footer-height)) * .16)),155px)/.86 var(--serif);letter-spacing:-.045em;text-align:left;white-space:nowrap;animation:none}
++.lumiere-name span{display:block}
++.lumiere-name span+span{margin-top:.12em}
++.lumiere-subtitle{margin-top:clamp(24px,4svh,40px);display:flex;flex-direction:column;align-items:flex-start;color:#f7eee4}
++.lumiere-subtitle>span{font:normal clamp(12px,1.35vw,20px)/1.25 var(--serif);letter-spacing:.22em;white-space:nowrap}
++.lumiere-subtitle em{margin-top:9px;font:italic clamp(16px,1.4vw,23px)/1.3 var(--serif);letter-spacing:.02em}
++.lumiere-scroll{position:absolute;z-index:5;top:16px;left:6.5%;min-height:24px;display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.17em;text-decoration:none;color:#e6d3a8}
++.lumiere-scroll span{font-size:14px}
+ .masthead:has(~ .story .lumiere-hero) {z-index:30}
+ body:has(.lumiere-hero) .masthead{background:rgba(38,35,33,.88);color:#f5ede3;border-color:rgba(255,255,255,.17);backdrop-filter:blur(12px)}
+ body:has(.lumiere-hero) .masthead .top-nav a,body:has(.lumiere-hero) .masthead .brand span{color:#e1d5c9}
+ body:has(.lumiere-hero) .masthead button{color:#f5ede3;border-color:#7b716a}
+ body:has(.lumiere-hero) .footer{backdrop-filter:blur(12px)}
+-@media(max-width:800px){.lumiere-portrait{height:82svh;bottom:5%}.lumiere-name{font-size:clamp(49px,12.6vw,100px);top:49%;line-height:.9}.lumiere-subtitle{top:78%}.lumiere-subtitle>span{font-size:clamp(11px,2.5vw,18px);letter-spacing:.17em}.lumiere-scroll{bottom:110px}}
+-@media(max-width:520px){.lumiere-hero{min-height:100svh!important}.lumiere-portrait{height:71svh;bottom:14%}.lumiere-name{font-size:clamp(45px,12.3vw,72px);top:49%}.lumiere-subtitle{top:77%}.lumiere-subtitle em{font-size:15px}.lumiere-scroll{bottom:95px;font-size:8px}}
+-@media(prefers-reduced-motion:reduce){.lumiere-portrait,.lumiere-name{animation:none!important}}
++@media(min-aspect-ratio:2/1) and (min-width:1001px){.lumiere-portrait{left:auto;right:-4%;transform:none}}
++@media(max-width:1000px){.lumiere-copy{top:8%;width:47%}.chapter.lumiere-hero .lumiere-name{font-size:clamp(54px,8.4vw,86px)}.lumiere-portrait{height:95%;bottom:-18%;left:68%}}
++@media(max-width:600px){.lumiere-copy{top:6%;left:7%;width:86%}.chapter.lumiere-hero .lumiere-name{font-size:clamp(40px,min(13vw,calc((100svh - var(--header-height) - var(--footer-height)) * .1)),68px)}.lumiere-subtitle{margin-top:20px}.lumiere-subtitle>span{font-size:12px;letter-spacing:.18em}.lumiere-subtitle em{font-size:16px}.lumiere-portrait{height:90%;bottom:-18%;left:55%}.lumiere-scroll{left:7%;top:6px;font-size:8px}}
+ 
+ /* Consolidated Chapter 02: editorial page turn */
+ .page-turn-chapter{display:flex!important;flex-direction:column;align-items:stretch;gap:0;min-height:100svh;padding:0!important;margin:0 calc(-1 * clamp(20px,4vw,70px));border:0;position:relative;scroll-margin-top:72px;background:#211f1d;color:#f4eee5}
+@@ -197,7 +194,7 @@
+ }
+ 
+ .epilogue-chapter{display:block!important;min-height:100svh;margin:0 calc(-1 * clamp(20px,4vw,70px));padding:0 0 120px!important;background:var(--professional-ivory);color:var(--professional-ink);border:0}
+-.epilogue-chapter>.journey-chapter-bar{--separator-image:url('assets/cover-lumiere.webp');--separator-focus:center 60%;--separator-base:#514a45}
++.epilogue-chapter>.journey-chapter-bar{--separator-image:url('assets/cover-editorial.png');--separator-focus:center 30%;--separator-base:#514d49}
+ .epilogue-copy{display:grid;grid-template-columns:1.2fr 1fr;gap:25px 7%;align-items:end;padding:clamp(65px,11vh,140px) clamp(22px,4vw,70px) 70px}
+ .epilogue-copy>.eyebrow{grid-column:1/-1;margin:0;color:var(--professional-accent)}
+ .chapter .epilogue-copy h1{font:400 clamp(60px,7.8vw,140px)/.94 var(--serif);letter-spacing:-.06em;margin:0}
+@@ -222,10 +219,10 @@
+ .memory-card p{font:italic 25px/1.2 var(--serif);margin:16px 0 8px}
+ .memory-card a{font:600 9px/1.5 Arial,sans-serif;letter-spacing:.08em;text-decoration:none;display:inline-block;padding:5px 0;color:var(--professional-accent);border-bottom:1px solid transparent}
+ .memory-card a:hover{border-bottom-color:currentColor}
+-.memory-cover>button{background:radial-gradient(ellipse at 50% 30%,#746d67,#302a26)}
+-.memory-cover img{object-fit:contain;filter:url(#cover-edge) grayscale(1) contrast(1.05)}
++.memory-cover>button{background:linear-gradient(110deg,#3b3835,#514d49 58%,#514e4a)}
++.memory-cover img{object-fit:contain}
+ .memory-card:has(img[src*="switching-gears"]) img{object-fit:contain}
+-.lightbox .cover-detail{filter:url(#cover-edge) grayscale(1) contrast(1.05)}
++.lightbox .cover-detail{background:#514d49}
+ .memory-strip-hint{margin:25px clamp(22px,4vw,70px) 30px;color:#69584b;font-weight:400}
+ .epilogue-signature{margin:clamp(55px,10vh,110px) clamp(22px,4vw,70px) 55px;padding-top:45px;border-top:1px solid #c9bbae;text-align:center}
+ .epilogue-signature .eyebrow{color:var(--professional-accent)}
+@@ -257,9 +254,7 @@
+ .story>.chapter,.professional-moment{scroll-margin-top:0;scroll-margin-bottom:0}
+ .story>.chapter{min-width:0;margin-inline:calc(-1 * var(--story-gutter))}
+ .story>.chapter:before{content:none}
+-.story>.lumiere-hero,.memory-hero{min-height:calc(100svh - var(--header-height) - var(--footer-height))!important}
+-.lumiere-portrait{height:min(98%,1000px)}
+-.lumiere-scroll{bottom:clamp(28px,6svh,70px)}
++.memory-hero{min-height:calc(100svh - var(--header-height) - var(--footer-height))!important}
+ .memory-content{margin-top:clamp(70px,12svh,150px);margin-bottom:150px}
+ .cutout-chapter{min-height:clamp(680px,calc(100svh - var(--header-height) - var(--footer-height)),1100px)}
+ .professional-index{bottom:calc(var(--footer-height) + 12px)}
+@@ -267,12 +262,10 @@
+ .memory-strip-controls button{min-height:44px}
+ .memory-browse{min-width:44px;font-size:18px;padding:8px}
+ .memory-card a{display:inline-flex;align-items:center;min-height:44px}
+-@media(max-width:800px){.lumiere-portrait{height:82%}}
+ @media(max-width:700px){
+  :root{--header-height:65px;--footer-height:60px;--story-gutter:16px}
+  .memory-content{margin-top:clamp(65px,10svh,100px)}
+ }
+ @media(max-width:520px){
+- .lumiere-portrait{height:71%}
+  .cutout-chapter{min-height:max(650px,calc(100svh - var(--header-height) - var(--footer-height)))}
+ }
+--- a/LEGGIMI_V16_V15.md
++++ b/LEGGIMI_V16_V15.md
+@@ -10,6 +10,7 @@
+ Apri http://localhost:8000 (oppure usa la porta 8001 se occupata).
+ 
+ ## Novita
++- Copertina: applicata la proposta editoriale approvata con nome a sinistra, ritratto decentrato a destra, fondo sobrio e nessuna velatura sul corpo. `assets/cover-editorial.png` e una copia identica di Cover 8 fornita dall'utente, senza filtri, ricostruzioni o ritocchi ai contorni. Su mobile il testo precede il ritratto; il taglio destro dell'asset resta fuori inquadratura. Conservati invito allo scroll, navigazione, audio e fullscreen. Il nastro finale e il divisore dell'epilogo usano lo stesso nuovo ritratto; il vecchio WebP resta conservato.
+ - Chapter 01: THE FIRST LESSON mostra il ricordo del gioco di squadra con uno scorrimento del solo testo e la parola "teamwork" evidenziata; BACK TO THE MEMORY torna all'introduzione. Fotografia e titolo restano fermi. Il comando funziona anche da tastiera e con movimento ridotto il cambio è immediato.
+ - Chapter 02: introduzione dedicata ai viaggi come occasione di confronto, messa in discussione, cambio di prospettiva e crescita, senza riferimenti a corsa o mezze maratone. "curiosity never really takes a day off" usa l'accento fotografico in grassetto corsivo, coerente con le altre frasi evidenziate. Titolo Always Exploring e fotografie restano invariati.
+ - Chapter 02: cinque scene, dopo la rimozione di Open Horizons e After Dark. Numerazione e controlli aggiornati; le immagini escluse non compaiono più nel nastro finale, ma gli asset restano nella cartella. Moments in Between indica Playa del Carmen · Mexico; Still Discovering indica Kapalua Beach · Maui. Anche le didascalie della galleria finale riportano i luoghi.
+@@ -42,18 +43,36 @@
+ - Il separatore 05–06 (EPILOGUE) usa lo stesso trattamento fotografico trasparente degli altri capitoli, con un dettaglio del ritratto della copertina. Il contenuto della 06 mantiene il fondo avorio.
+ - Chapter 06: una sola linea orizzontale di card, in movimento lento e continuo da destra a sinistra quando è visibile. Il mouse su una card ferma tutta la linea; uscendo da tutte le card il movimento riprende. Le card già uscite vengono riportate in fondo, senza duplicare le fotografie o interrompere visivamente lo scorrimento.
+ - Le fotografie restano caricate su richiesta, vicino alla parte visibile della linea. Conservati ingrandimento e scorrimento manuale; due frecce visibili permettono di esplorare il nastro anche con il mouse. Il movimento si ferma anche con focus nella linea o nei controlli, durante l'interazione touch/trackpad, nel dialog o quando la pagina non è visibile. PAUSE/RESUME offre un controllo esplicito; con movimento ridotto lo scorrimento automatico è disabilitato.
+-- Conservati: asset e trattamento fotografico della copertina principale, altre fotografie, titoli e racconti approvati salvo le rifiniture indicate, soundtrack Sound ON/OFF, fullscreen e timeline. Nessun nuovo framework o dipendenza runtime.
++- Conservati: altre fotografie, titoli e racconti approvati salvo le rifiniture indicate, soundtrack Sound ON/OFF, fullscreen e timeline. Nessun nuovo framework o dipendenza runtime.
+ 
++## Copia di sicurezza e ripristino della copertina
++Prima dell'applicazione e stata salvata `backups/cover-before-editorial-2026-11-23/`, che contiene copie integrali dei precedenti `index.html`, `script.js`, `style.css`, di questo LEGGIMI e di `assets/cover-lumiere.webp`. `SHA256SUMS` permette di verificare le copie. Gli altri asset e i capitoli incorporati non sono stati modificati.
++
++`copertina-editoriale.patch`, nella stessa cartella, registra le sole modifiche di questa applicazione. Per annullarle dalla cartella `v16_v15`, verificare prima il ripristino senza scrivere:
++
++```bash
++patch -C -R -p1 < backups/cover-before-editorial-2026-11-23/copertina-editoriale.patch
++```
++
++Solo se la verifica riesce, applicare il ripristino:
++
++```bash
++patch -R -p1 < backups/cover-before-editorial-2026-11-23/copertina-editoriale.patch
++```
++
++Il nuovo PNG puo restare come asset inutilizzato. Se in futuro le stesse righe vengono modificate e la verifica non riesce, recuperare manualmente i soli blocchi della copertina dalle copie: non sovrascrivere interi file, per non perdere eventuali interventi successivi.
++
+ ## Navigazione e rifiniture responsive
+-- Header e footer vengono misurati: copertina, spazi della pagina e arrivo delle ancore rispettano le barre fisse, anche quando l'header va a capo. Le ancore non sommano più due distanze superiori. Il sottotitolo e l'invito allo scroll della copertina, così come i comandi della 01, restano fuori dall'area del footer. Rimossi i debordamenti laterali mobile dovuti ai margini full-bleed e a uno sfondo decorativo ereditato.
++- Header e footer vengono misurati: copertina, spazi della pagina e arrivo delle ancore rispettano le barre fisse, anche quando l'header va a capo. Le ancore non sommano più due distanze superiori. Il sottotitolo resta accanto al nome; l'invito allo scroll occupa lo spazio libero sopra il titolo. Questi elementi e i comandi della 01 restano fuori dall'area del footer. Rimossi i debordamenti laterali mobile dovuti ai margini full-bleed e a uno sfondo decorativo ereditato.
+ - PageUp/PageDown fanno avanzare la lettura di un'area visibile con sovrapposizione, senza saltare automaticamente al capitolo successivo: Milestones non viene più scavalcata. I capitoli incorporati inoltrano questi due comandi alla pagina principale; frecce destra/sinistra e pulsanti numerati continuano a sfogliare le scene. Le pagine standalone mantengono lo sfoglio con PageUp/PageDown.
+ - I link della galleria finale ai capitoli 02 e 03 riaprono la scena precisa, anche se nel frattempo ne è stata sfogliata un'altra. Gli indirizzi sono condivisibili, per esempio `index.html#chapter-2?scene=vienna` o `index.html#chapter-3?scene=books`; il caricamento iniziale e i comandi Avanti/Indietro del browser applicano la stessa destinazione.
+ - Le esperienze 02 e 03 usano il caricamento differito dell'iframe. Viene preparata la scena successiva, poi quelle adiacenti alla scena visitata, non tutta la collezione all'avvio.
+ - `music.webp` e `restoration.webp` riducono il totale delle due fotografie da 7.042.958 a 4.112.660 byte (circa il 42% in meno), con codifica lossless verificata pixel per pixel. I PNG originali restano nella cartella e non sono stati modificati.
+ 
+ ## Verifica nel browser
++- Nuova copertina verificata nel sito reale con viewport simulati da 320 a 1720 px: testo fuori dalla fotografia chiara, nessun debordamento orizzontale, sottotitolo libero dal footer, invito allo scroll separato dal titolo e bordo destro dell'asset fuori inquadratura. Verificati arrivo alla 01, timeline, ritorno alla copertina e apertura della nuova foto nel dialog della galleria, senza filtro e con ripristino del focus. Provato il ripristino su copie temporanee: tutti e quattro i file recuperati coincidono byte per byte con le copie precedenti.
+ - Rifiniture verificate a 1280, 375 e 320 px: nessun debordamento orizzontale, ancore allineate all'header misurato, racconti delle scene e località leggibili, comandi della 01 liberi dal footer. Verificati anche ritorno alla stessa scena dopo averne visitata un'altra, link diretto iniziale, cronologia Indietro, frecce della galleria e ripristino del focus dopo l'ingrandimento.
+ - Verificata apertura/chiusura della citazione con espansione e riduzione dell'iframe, senza scrollbar interna e conservando il corpo di 15 px. PageDown attraversa la 05 senza saltare Milestones ed è inoltrato correttamente dagli iframe alla pagina principale.
+ - Verificati nell'anteprima Browser palette, separatori e controlli con viewport simulati di 1280, 749, 375 e 320 px; verificati selezione diretta, ritorno, focus da tastiera e assenza di sovrapposizione fra selettori e toolbar.
+ - Verificato il comportamento JavaScript del movimento ridotto e del cambio di preferenza durante lo sfoglio tramite una preferenza simulata.
+-- Restano necessari controlli su Safari e Chrome reali, dispositivi mobili e fullscreen nativo: i viewport simulati non sostituiscono questi controlli. La rifinitura fotografica localizzata dei capelli in copertina resta separata da questo intervento di fruizione.
++- Restano necessari controlli su Safari e Chrome reali, dispositivi mobili e fullscreen nativo: i viewport simulati non sostituiscono questi controlli. La nuova copertina non applica il precedente filtro SVG dei capelli, conservato nella copia di sicurezza insieme al vecchio ritratto.

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#211f1d"><title>Passions — Cinematic Page Turn</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<main class="experience" aria-label="Chapter 03 Passions">
+  <div id="stage" class="stage" aria-live="polite"><div id="current" class="sheet current"></div><div id="incoming" class="sheet incoming" aria-hidden="true" inert></div></div>
+  <header class="topbar"><span class="brand">RICCARDO TAMMARO</span><span class="chapter">WALK THROUGH TIME <span class="divider">/</span> CHAPTER 03</span></header>
+  <dialog id="songDialog" class="song-dialog" aria-labelledby="songTitle">
+    <button id="closeSong" class="song-close" type="button" aria-label="Close song player">CLOSE ×</button>
+    <p class="song-credit">MUSIC &amp; LYRICS BY RICCARDO TAMMARO · WITH AI SUPPORT</p>
+    <h2 id="songTitle">The Crown is Ash</h2>
+    <audio id="originalSong" src="../media/the-crown-is-ash.m4a" controls preload="none" aria-label="Listen to The Crown is Ash"></audio>
+    <p id="songError" class="song-error" role="alert" hidden></p>
+  </dialog>
+  <footer class="toolbar"><div class="meta"><span>03 / 06</span><span id="pageNumber">01 / 04</span></div><div class="controls"><button id="prev" aria-label="Scena precedente">← <span>PREVIOUS</span></button><button id="next" aria-label="Scena successiva"><span>NEXT PAGE</span> →</button></div><a class="hint" href="../index.html#chapter-4" target="_top" style="color:#fff">CONTINUE ↓</a></footer>
+  <nav class="progress" id="progress" aria-label="Choose a scene"></nav>
+</main>
+<script src="script.js?v=stable-scene-frame"></script>
+</body></html>

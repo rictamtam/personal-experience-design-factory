@@ -1,0 +1,25 @@
+COPERTINA PRECEDENTE - COPIA DEL 23 NOVEMBRE 2026
+
+Questa cartella conserva index.html, script.js, style.css, LEGGIMI_V16_V15.md
+e il precedente assets/cover-lumiere.webp prima della copertina editoriale.
+Non e una copia autonoma dell'intero sito: gli altri asset restano in v16_v15.
+
+Per verificare le copie, dalla cartella v16_v15:
+
+  (cd backups/cover-before-editorial-2026-11-23 && shasum -a 256 -c SHA256SUMS)
+
+Per controllare il ripristino senza scrivere:
+
+  patch -C -R -p1 < backups/cover-before-editorial-2026-11-23/copertina-editoriale.patch
+
+Solo se il controllo riesce, ripristinare con:
+
+  patch -R -p1 < backups/cover-before-editorial-2026-11-23/copertina-editoriale.patch
+
+La patch annulla le modifiche della copertina e dei riferimenti collegati,
+non i capitoli incorporati o altre parti del sito.
+Il nuovo assets/cover-editorial.png puo restare come file inutilizzato.
+
+Se in futuro il controllo non riesce per altre modifiche alle stesse righe,
+recuperare manualmente i blocchi della copertina dalle copie.
+Non sovrascrivere interi file se contengono interventi successivi da preservare.
